@@ -10,7 +10,7 @@ import tweepy
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="TODO",
+        description="Authorise a Twitter account against an app.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
         'consumer_key',
