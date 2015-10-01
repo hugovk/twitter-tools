@@ -1,0 +1,24 @@
+language: python
+
+python:
+ - pypy
+ - pypy3
+ - 2.6
+ - 2.7
+ - 3.2
+ - 3.3
+ - 3.4
+ - 3.5
+
+sudo: false
+
+install:
+ - pip install pep8 pyflakes
+
+script:
+ # Pretend tests
+ - pep8 --statistics --count .
+ - pyflakes . | tee >(wc -l)
+
+matrix:
+  fast_finish: true
