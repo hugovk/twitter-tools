@@ -130,10 +130,10 @@ def tweetboard(list_owner, list_name):
                  '" target="twitter">@' + user['screen_name'] +
                  '</a>:</div> <div class="status">' + status['text'] +
                  '</div>')
-        print('<a href="' + status_link + '" target="twitter">')
-        print('<div class="created_at">' + status['created_at'] + '</div>')
-        print('<div class="ago">' + ago + '</div>')
-        print('</a>')
+        status_a_href = '<a href="' + status_link + '" target="twitter">'
+        print('<div class="created_at">' + status_a_href +
+              status['created_at'] + '</a></div>')
+        print('<div class="ago">' + status_a_href + ago + '</a></div>')
         print("</div>")
 
     print("</ol></body></html>")
