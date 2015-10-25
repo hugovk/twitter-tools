@@ -3,6 +3,8 @@
 """
 Given a Twitter list make a dashboard of their latest tweets.
 Doesn't post anything to Twitter.
+
+Usage: python tweetboard.py > tweetboard.html
 """
 from __future__ import print_function, unicode_literals
 
@@ -94,6 +96,20 @@ def tweetboard(list_owner, list_name):
         .warning a:visited {
             color: orange;
             font-weight: bold;
+        }
+        .tweet div {
+            padding-bottom: 10px;
+        }
+        .status {
+            word-break: break-word;
+        }
+        li {
+            border: 1px solid #000;
+            display: inline-block;
+            margin: 5px;
+            min-height: 250px;
+            vertical-align: top;
+            width: 240px;
         }
         </style>
         </head>
