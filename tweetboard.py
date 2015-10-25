@@ -108,6 +108,7 @@ def tweetboard(list_owner, list_name):
             display: inline-block;
             margin: 5px;
             min-height: 250px;
+            padding: 5px;
             vertical-align: top;
             width: 240px;
         }
