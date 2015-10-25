@@ -60,6 +60,11 @@ def get_list_members(list_owner, list_name):
     return members["users"]
 
 
+def commafy(number):
+    """Given an int, return a string with thousands separators """
+    return "{:,}".format(number)
+
+
 def tweetboard(list_owner, list_name):
     global TWITTER
     if TWITTER is None:
@@ -97,12 +102,6 @@ def tweetboard(list_owner, list_name):
             color: orange;
             font-weight: bold;
         }
-        .tweet div {
-            padding-bottom: 10px;
-        }
-        .status {
-            word-break: break-word;
-        }
         li {
             border: 1px solid #000;
             display: inline-block;
@@ -111,6 +110,15 @@ def tweetboard(list_owner, list_name):
             padding: 5px;
             vertical-align: top;
             width: 240px;
+        }
+        .tweet div {
+            padding-bottom: 10px;
+        }
+        .status {
+            word-break: break-word;
+        }
+        .stats span {
+            display: block;
         }
         </style>
         </head>
@@ -139,18 +147,28 @@ def tweetboard(list_owner, list_name):
         elif h > 12:
             extra_classes = "warning"
 
+        text = status['text'].replace("\n", "<br>")
+
+        tweets = commafy(user['statuses_count'])
+        following = commafy(user['friends_count'])
+        followers = commafy(user['followers_count'])
+
         user_link = "https://twitter.com/" + user['screen_name']
         status_link = user_link + "/status/" + status['id_str']
+        status_a_href = '<a href="' + status_link + '" target="twitter">'
 
         print('<li><div class="tweet ' + extra_classes + '">')
         print_it('<div class="screen_name"><a href="' + user_link +
                  '" target="twitter">@' + user['screen_name'] +
-                 '</a>:</div> <div class="status">' + status['text'] +
+                 '</a>:</div> <div class="status">' + text +
                  '</div>')
-        status_a_href = '<a href="' + status_link + '" target="twitter">'
         print('<div class="created_at">' + status_a_href +
               status['created_at'] + '</a></div>')
         print('<div class="ago">' + status_a_href + ago + '</a></div>')
+        print('<div class="stats">')
+        print('<span class="tweets">Tweets: ' + tweets + '</span>')
+        print('<span class="following">Following: ' + following + '</span>')
+        print('<span class="followers">Followers: ' + followers + '</span>')
         print("</div>")
 
     print("</ol></body></html>")
