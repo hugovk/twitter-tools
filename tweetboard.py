@@ -116,6 +116,9 @@ def tweetboard(list_owner, list_name):
   .tweet div {
     padding-bottom: 10px;
   }
+  .screen_name {
+    text-align: center;
+  }
   .status {
     word-break: break-word;
   }
@@ -168,10 +171,9 @@ def tweetboard(list_owner, list_name):
         status_a_href = '<a href="' + status_link + '" target="twitter">'
 
         print('    <li><div class="tweet ' + extra_classes + '">')
-        print_it('      <div class="screen_name"><a href="' + user_link +
-                 '" target="twitter">@' + user['screen_name'] +
-                 '</a>:</div> <div class="status">' + text +
-                 '</div>')
+        print('      <div class="screen_name"><a href="' + user_link +
+                 '" target="twitter">@' + user['screen_name'] + '</a></div>')
+        print_it('      <div class="status">' + text + '</div>')
         print('      <div class="created_at">' + status_a_href +
               status['created_at'] + '</a></div>')
         print('      <div class="ago">' + status_a_href + ago + '</a></div>')
