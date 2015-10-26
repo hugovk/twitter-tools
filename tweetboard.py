@@ -88,6 +88,7 @@ def tweetboard(list_owner, list_name):
   <title>Tweetboard</title>
   <style type="text/css">
   body {
+    background-color: lightsteelblue;
     font-family: sans-serif;
   }
   .danger,
@@ -103,6 +104,7 @@ def tweetboard(list_owner, list_name):
     font-weight: bold;
   }
   li {
+    background-color: white;
     border: 1px solid #000;
     display: inline-block;
     margin: 5px;
@@ -116,6 +118,9 @@ def tweetboard(list_owner, list_name):
   }
   .status {
     word-break: break-word;
+  }
+  .stats {
+    font-size: smaller;
   }
   .stats span {
     display: block;
