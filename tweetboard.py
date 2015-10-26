@@ -149,6 +149,11 @@ def tweetboard(list_owner, list_name):
 
         text = status['text'].replace("\n", "<br>")
 
+        # "Mon Jun 08 11:23:45 +0000 2015"
+        created = user['created_at']
+        # "08 Jun 2015"
+        created = created[8:11] + created[4:7] + created[-5:]
+
         tweets = commafy(user['statuses_count'])
         following = commafy(user['friends_count'])
         followers = commafy(user['followers_count'])
@@ -166,6 +171,7 @@ def tweetboard(list_owner, list_name):
               status['created_at'] + '</a></div>')
         print('      <div class="ago">' + status_a_href + ago + '</a></div>')
         print('      <div class="stats">')
+        print('        <span class="created">Created: ' + created + '</span>')
         print('        <span class="tweets">Tweets: ' + tweets + '</span>')
         print('        <span class="following">Following: ' + following +
               '</span>')
