@@ -61,7 +61,7 @@ def get_list_members(list_owner, list_name):
 
 
 def commafy(number):
-    """Given an int, return a string with thousands separators """
+    """ Given an int, return a string with thousands separators """
     return "{:,}".format(number)
 
 
@@ -84,47 +84,47 @@ def tweetboard(list_owner, list_name):
 
     print('''
 <html>
-<head>
-    <title>Tweetboard</title>
-        <style type="text/css">
-        body {
-            font-family: sans-serif;
-        }
-        .danger,
-        .danger a:link,
-        .danger a:visited {
-            color: red;
-            font-weight: bold;
-        }
-        .warning,
-        .warning a:link,
-        .warning a:visited {
-            color: orange;
-            font-weight: bold;
-        }
-        li {
-            border: 1px solid #000;
-            display: inline-block;
-            margin: 5px;
-            min-height: 250px;
-            padding: 5px;
-            vertical-align: top;
-            width: 240px;
-        }
-        .tweet div {
-            padding-bottom: 10px;
-        }
-        .status {
-            word-break: break-word;
-        }
-        .stats span {
-            display: block;
-        }
-        </style>
-        </head>
-        <body>
-            <ol>
-          ''')
+  <head>
+  <title>Tweetboard</title>
+  <style type="text/css">
+  body {
+    font-family: sans-serif;
+  }
+  .danger,
+  .danger a:link,
+  .danger a:visited {
+    color: red;
+    font-weight: bold;
+  }
+  .warning,
+  .warning a:link,
+  .warning a:visited {
+    color: orange;
+    font-weight: bold;
+  }
+  li {
+    border: 1px solid #000;
+    display: inline-block;
+    margin: 5px;
+    min-height: 250px;
+    padding: 5px;
+    vertical-align: top;
+    width: 240px;
+  }
+  .tweet div {
+    padding-bottom: 10px;
+  }
+  .status {
+    word-break: break-word;
+  }
+  .stats span {
+    display: block;
+  }
+  </style>
+</head>
+<body>
+  <ol>
+''')
 
     now = time.time()
 
@@ -157,22 +157,28 @@ def tweetboard(list_owner, list_name):
         status_link = user_link + "/status/" + status['id_str']
         status_a_href = '<a href="' + status_link + '" target="twitter">'
 
-        print('<li><div class="tweet ' + extra_classes + '">')
-        print_it('<div class="screen_name"><a href="' + user_link +
+        print('    <li><div class="tweet ' + extra_classes + '">')
+        print_it('      <div class="screen_name"><a href="' + user_link +
                  '" target="twitter">@' + user['screen_name'] +
                  '</a>:</div> <div class="status">' + text +
                  '</div>')
-        print('<div class="created_at">' + status_a_href +
+        print('      <div class="created_at">' + status_a_href +
               status['created_at'] + '</a></div>')
-        print('<div class="ago">' + status_a_href + ago + '</a></div>')
-        print('<div class="stats">')
-        print('<span class="tweets">Tweets: ' + tweets + '</span>')
-        print('<span class="following">Following: ' + following + '</span>')
-        print('<span class="followers">Followers: ' + followers + '</span>')
-        print("</div>")
+        print('      <div class="ago">' + status_a_href + ago + '</a></div>')
+        print('      <div class="stats">')
+        print('        <span class="tweets">Tweets: ' + tweets + '</span>')
+        print('        <span class="following">Following: ' + following +
+              '</span>')
+        print('        <span class="followers">Followers: ' + followers +
+              '</span>')
+        print("      </div>")
+        print("    </li>")
 
-    print("</ol></body></html>")
-
+    print('''
+    </ol>
+</body>
+</html>
+''')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
