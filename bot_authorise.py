@@ -31,7 +31,7 @@ if __name__ == "__main__":
     auth_url = auth.get_authorization_url()
 
     print()
-    print("Please open this URL in a browsr that's logged in as your bot,\n"
+    print("Please open this URL in a browser that's logged in as your bot,\n"
           "authorise the application, and then type in the PIN back here.")
     print()
     print(auth_url)
