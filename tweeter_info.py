@@ -8,11 +8,12 @@ from __future__ import print_function, unicode_literals
 
 import argparse
 import calendar
+import re
 import time
 import twitter
 import yaml
 
-from pprint import pprint
+# from pprint import pprint
 
 TWITTER = None
 
@@ -63,6 +64,19 @@ def get_tweets(username):
     return tweets
 
 
+def taggy(text, class_name):
+    """Wrap in HTML tags"""
+    if args.html:
+        return '<span class="{0}">{1}</span>'.format(class_name, text)
+    else:
+        return text
+
+
+def strip_tags(text):
+    """Strip HTML tags"""
+    return re.sub('<[^<]+?>', '', text)
+
+
 def tweeter_info(username):
     global TWITTER
     if TWITTER is None:
@@ -80,10 +94,11 @@ def tweeter_info(username):
 
     users = [TWITTER.users.show(screen_name=','.join([username]))]  # TODO fix
 
-    print('''
+    if args.html:
+        print('''
 <html>
   <head>
-  <title>Tweetboard</title>
+  <title>Tweeter info</title>
   <style type="text/css">
   body {
     background-color: lightsteelblue;
@@ -136,7 +151,6 @@ def tweeter_info(username):
 
     for user in users:
 
-
         # pprint(user)
         if 'status' not in user:
             continue
@@ -173,31 +187,51 @@ def tweeter_info(username):
         statuses = get_tweets(username)
         clients = summarise_tweet_clients(statuses)
 
-        print('    <li class="user"><div class="tweet ' + extra_classes + '">')
-        print('      <div class="screen_name"><a href="' + user_link +
-                 '" target="twitter">@' + user['screen_name'] + '</a></div>')
-        print_it('      <div class="status">' + text + '</div>')
-        print('      <div class="created_at">' + status_a_href +
-              status['created_at'] + '</a></div>')
-        print('      <div class="ago">' + status_a_href + ago + '</a></div>')
-        print('      <div class="stats">')
-        print('        <span class="created">Created: ' + created + '</span>')
-        print('        <span class="tweets">Tweets: ' + tweets + '</span>')
-        print('        <span class="following">Following: ' + following +
-              '</span>')
-        print('        <span class="followers">Followers: ' + followers +
-              '</span>')
+        if args.html:
+            print('    <li class="user"><div class="tweet ' + extra_classes +
+                  '">')
+            print('      <div class="screen_name"><a href="' + user_link +
+                  '" target="twitter">@' + user['screen_name'] + '</a></div>')
+            print_it('      <div class="status">' + text + '</div>')
+            print('      <div class="created_at">' + status_a_href +
+                  status['created_at'] + '</a></div>')
+            print('      <div class="ago">' + status_a_href + ago +
+                  '</a></div>')
+            print('      <div class="stats">')
+        else:
+            print('@' + user['screen_name'])
+            print_it(status['text'])
+            print(status['created_at'])
 
-        print('        <span class="clients">Clients for last 100 tweets:<ul>')
+        print(taggy('Created: ' + created, "created"))
+        print(taggy('Tweets: ' + tweets, "tweets"))
+        print(taggy('Following: ' + following, "following"))
+        print(taggy('Followers: ' + followers, "followers"))
+
+        if args.html:
+            print('        <span class="clients">'
+                  'Clients for last 100 tweets: ')
+            print('          <ul>')
+        else:
+            print('Clients for last 100 tweets: ')
         for client in clients:
-            print('          <li>' + client + ': ' + str(clients[client]))
-        print('        </ul></span>')
+            if args.html:
+                print_it('            <li>' + client + ': ' +
+                         str(clients[client]))
+            else:
+                print_it('   * ' + strip_tags(client) + ': ' +
+                         str(clients[client]))
+        if args.html:
+            print('''
+          </ul>
+        </span>
+      </div>
+    </li>
+''')
 
-        print("      </div>")
-        print("    </li>")
-
-    print('''
-    </ol>
+    if args.html:
+        print('''
+  </ol>
 </body>
 </html>
 ''')
@@ -214,6 +248,9 @@ if __name__ == "__main__":
     parser.add_argument(
         '-u', '--user', default='hugovk',
         help="The list owner")
+    parser.add_argument(
+        '--html', action='store_true',
+        help="HTML tags for formatting")
     args = parser.parse_args()
 
     data = load_yaml(args.yaml)
