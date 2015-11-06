@@ -2,7 +2,8 @@
 # encoding: utf-8
 """
 Get some info about a Twitter user, like clients used.
-Usage: python tweeter_info.py > tweeter_info.html
+Usage for CLI: python tweeter_info.py
+Usage for web: python tweeter_info.py --html > tweeter_info.html
 """
 from __future__ import print_function, unicode_literals
 
