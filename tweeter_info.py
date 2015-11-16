@@ -242,13 +242,13 @@ if __name__ == "__main__":
         description="Get some info about a Twitter user, like clients used.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
+        'user',
+        help="The Twitter account to check")
+    parser.add_argument(
         '-y', '--yaml',
         default='/Users/hugo/Dropbox/bin/data/cookerybot.yaml',
         help="YAML file location containing Twitter keys and secrets. "
               "Just for read-only access, doesn't post to Twitter.")
-    parser.add_argument(
-        '-u', '--user', default='hugovk',
-        help="The list owner")
     parser.add_argument(
         '--html', action='store_true',
         help="HTML tags for formatting")
