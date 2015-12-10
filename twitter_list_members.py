@@ -54,7 +54,7 @@ def get_list_members(list_owner, list_name):
     all_users = []
 
     while cursor != 0:
-        print("Cursor:", cursor)
+        # print("Cursor:", cursor)
         users = TWITTER.lists.members(owner_screen_name=list_owner,
                                       slug=list_name,
                                       cursor=cursor,
