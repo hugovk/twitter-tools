@@ -89,10 +89,10 @@ if __name__ == "__main__":
             credentials['consumer_key'],
             credentials['consumer_secret']))
 
-    members = get_list_members(args.user, args.list)
+    users = get_list_members(args.user, args.list)
 
 #     pprint(members)
-    for member in members:
-        print(member["screen_name"], "\t", member["created_at"])
+    for user in users:
+        print(user["screen_name"], "\t", user["created_at"])
 
 # End of file
