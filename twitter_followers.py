@@ -9,7 +9,7 @@ import argparse
 from twitter import Twitter, OAuth  # pip install twitter
 import yaml
 
-from pprint import pprint
+# from pprint import pprint
 
 TWITTER = None
 
@@ -50,10 +50,10 @@ def get_following(user):
     while cursor != 0:
         print("Cursor:", cursor)
         users = TWITTER.friends.list(screen_name=user,
-                                       cursor=cursor,
-                                       include_user_entities=False,
-                                       skip_status=True,
-                                       count=200)
+                                     cursor=cursor,
+                                     include_user_entities=False,
+                                     skip_status=True,
+                                     count=200)
         cursor = users['next_cursor']
         all_users.extend(users['users'])
 
@@ -97,10 +97,10 @@ if __name__ == "__main__":
 
     if TWITTER is None:
         TWITTER = Twitter(auth=OAuth(
-       credentials['oauth_token'],
-       credentials['oauth_token_secret'],
-       credentials['consumer_key'],
-       credentials['consumer_secret']))
+            credentials['oauth_token'],
+            credentials['oauth_token_secret'],
+            credentials['consumer_key'],
+            credentials['consumer_secret']))
 
     data = load_yaml(args.yaml)
 

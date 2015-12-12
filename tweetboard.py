@@ -172,7 +172,7 @@ def tweetboard(list_owner, list_name):
 
         print('    <li><div class="tweet ' + extra_classes + '">')
         print('      <div class="screen_name"><a href="' + user_link +
-                 '" target="twitter">@' + user['screen_name'] + '</a></div>')
+              '" target="twitter">@' + user['screen_name'] + '</a></div>')
         print_it('      <div class="status">' + text + '</div>')
         print('      <div class="created_at">' + status_a_href +
               status['created_at'] + '</a></div>')
