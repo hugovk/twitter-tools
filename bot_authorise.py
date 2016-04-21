@@ -13,6 +13,11 @@ from __future__ import print_function, unicode_literals
 import argparse
 import tweepy
 
+try:
+    input = raw_input
+except NameError:
+    pass
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -36,7 +41,7 @@ if __name__ == "__main__":
     print()
     print(auth_url)
 
-    verifier = raw_input('PIN: ').strip()
+    verifier = input('PIN: ').strip()
 
     auth.get_access_token(verifier)
 
