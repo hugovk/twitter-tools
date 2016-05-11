@@ -6,9 +6,11 @@ Usage for CLI: python tweeter_info.py
 Usage for web: python tweeter_info.py --html > tweeter_info.html
 """
 from __future__ import print_function, unicode_literals
+from sys import platform as _platform
 
 import argparse
 import calendar
+import os
 import re
 import time
 import twitter
@@ -22,6 +24,13 @@ TWITTER = None
 # cmd.exe cannot do Unicode so encode first
 def print_it(text):
     print(text.encode('utf-8'))
+
+
+def yaml_path(unixpath, winpath, yaml):
+    if _platform == "win32":
+        return os.path.join(winpath, yaml)
+    else:
+        return os.path.join(unixpath, yaml)
 
 
 def load_yaml(filename):
@@ -237,6 +246,7 @@ def tweeter_info(username):
 </html>
 ''')
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Get some info about a Twitter user, like clients used.",
@@ -245,8 +255,16 @@ if __name__ == "__main__":
         'user',
         help="The Twitter account to check")
     parser.add_argument(
+        '-u', '--unixpath',
+        default='/Users/hugo/Dropbox/',
+        help="Unixy (Linux/Mac) root path to YAML file.")
+    parser.add_argument(
+        '-w', '--winpath',
+        default='M:/',
+        help="Windows root path to YAML file.")
+    parser.add_argument(
         '-y', '--yaml',
-        default='/Users/hugo/Dropbox/bin/data/cookerybot.yaml',
+        default='bin/data/cookerybot.yaml',
         help="YAML file location containing Twitter keys and secrets. "
               "Just for read-only access, doesn't post to Twitter.")
     parser.add_argument(
@@ -254,7 +272,8 @@ if __name__ == "__main__":
         help="HTML tags for formatting")
     args = parser.parse_args()
 
-    data = load_yaml(args.yaml)
+    path = yaml_path(args.unixpath, args.winpath, args.yaml)
+    data = load_yaml(path)
 
     tweeter_info(args.user)
 
