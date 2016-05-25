@@ -76,6 +76,10 @@ if __name__ == "__main__":
         default='data/cookerybot.yaml',
         help="YAML file location containing Twitter keys and secrets. "
               "Just for read-only access, doesn't post to Twitter.")
+    parser.add_argument(
+        '-s', '--sort',
+        default='followers_count',
+        help="Sort by this")
     parser.add_argument('user', help="The list owner")
     parser.add_argument('list', help="The list slug")
     args = parser.parse_args()
@@ -91,8 +95,10 @@ if __name__ == "__main__":
 
     users = get_list_members(args.user, args.list)
 
+    # Sort
+    users = sorted(users, key=lambda k: k[args.sort])
 #     pprint(members)
     for user in users:
-        print(user["screen_name"], "\t", user["created_at"])
+        print(user[args.sort], "\t", user["screen_name"])
 
 # End of file
