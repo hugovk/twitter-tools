@@ -175,7 +175,8 @@ if __name__ == "__main__":
         description="Find the best tweets from last month, by faves and RTs.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
-        'user',
+        '-u', '--user',
+        default='kaikkisanat',
         help="The Twitter account to check")
     parser.add_argument(
         '-y', '--yaml',
