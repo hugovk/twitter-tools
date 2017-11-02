@@ -11,12 +11,12 @@ python:
 sudo: false
 
 install:
- - pip install pep8 pyflakes
+ - pip install pyflakes pycodestyle
 
 script:
  # Pretend tests
  - pyflakes .
- - pep8 --statistics --count .
+ - pycodestyle --statistics --count .
 
 matrix:
   fast_finish: true
