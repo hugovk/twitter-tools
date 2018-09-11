@@ -37,9 +37,8 @@ def load_yaml(filename):
     oauth_token_secret: TODO_ENTER_YOURS
     )
     """
-    f = open(filename)
-    data = yaml.safe_load(f)
-    f.close()
+    with open(filename) as f:
+        data = yaml.safe_load(f)
 
     return data
 
