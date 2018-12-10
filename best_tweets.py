@@ -35,9 +35,8 @@ def load_yaml(filename):
     oauth_token_secret: TODO_ENTER_YOURS
     )
     """
-    f = open(filename)
-    data = yaml.safe_load(f)
-    f.close()
+    with open(filename) as f:
+        data = yaml.safe_load(f)
 
     return data
 
@@ -146,7 +145,7 @@ def best_tweets(username):
     for tweet in best_tweet_list[:25]:
 
         # count += len(tweet['text']) + 1
-        # if count > 140:
+        # if count > 280:
             # break
 
         print_it(str(tweet['fav_rt_count']) + " " +
@@ -164,7 +163,7 @@ def best_tweets(username):
     for tweet in best_tweet_list[:25]:
 
         # count += len(tweet['text'])
-        # if count > 140:
+        # if count > 280:
             # break
 
         print_it(tweet['text'])

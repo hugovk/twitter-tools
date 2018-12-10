@@ -45,9 +45,8 @@ def load_yaml(filename):
     oauth_token_secret: TODO_ENTER_YOURS
     )
     """
-    f = open(filename)
-    data = yaml.safe_load(f)
-    f.close()
+    with open(filename) as f:
+        data = yaml.safe_load(f)
 
     return data
 
@@ -99,6 +98,7 @@ def download_tweets_images(tweets):
                 os.system(cmd)
             usernames.add(username)
         except KeyError:
+            print("no image found for", url)
             continue
 
     credits = " ".join(["@{}".format(u) for u in usernames])
@@ -114,7 +114,7 @@ if __name__ == "__main__":
     parser.add_argument(
         'tweets',
         nargs='+',
-        help="The tweets to like")
+        help="Download the images from these tweets.")
     parser.add_argument(
         '-u', '--unixpath',
         default='/Users/hugo/Dropbox/bin/data/',
@@ -128,9 +128,6 @@ if __name__ == "__main__":
         default='kaikkisanat.yaml',
         help="YAML file location containing Twitter keys and secrets "
              "for the account to do the liking. Needs write permission.")
-    parser.add_argument(
-        '--html', action='store_true',
-        help="HTML tags for formatting")
     args = parser.parse_args()
     doctest.testmod()
 

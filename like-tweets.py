@@ -24,6 +24,8 @@ def print_it(text):
 
 
 def yaml_path(unixpath, winpath, yaml):
+    if not yaml.endswith(".yaml"):
+        yaml += ".yaml"
     if _platform == "win32":
         return os.path.join(winpath, yaml)
     else:
@@ -43,9 +45,8 @@ def load_yaml(filename):
     oauth_token_secret: TODO_ENTER_YOURS
     )
     """
-    f = open(filename)
-    data = yaml.safe_load(f)
-    f.close()
+    with open(filename) as f:
+        data = yaml.safe_load(f)
 
     return data
 
@@ -54,7 +55,7 @@ def id_from_tweet_url(url):
     """
     >>> url = "https://twitter.com/hugovk/status/771714518724579328"
     >>> id_from_tweet_url(url)
-    771714518724579328
+    771714518724579328L
     """
     return int(url[url.rfind("/")+1:])
 
@@ -89,15 +90,15 @@ if __name__ == "__main__":
         help="The tweets to like")
     parser.add_argument(
         '-u', '--unixpath',
-        default='/Users/hugo/Dropbox/',
+        default='/Users/hugo/Dropbox/bin/data/',
         help="Unixy (Linux/Mac) root path to YAML file.")
     parser.add_argument(
         '-w', '--winpath',
-        default='M:/',
+        default='M:/bin/data/',
         help="Windows root path to YAML file.")
     parser.add_argument(
         '-y', '--yaml',
-        default='bin/data/kaikkisanat.yaml',
+        default='kaikkisanat.yaml',
         help="YAML file location containing Twitter keys and secrets "
              "for the account to do the liking. Needs write permission.")
     parser.add_argument(

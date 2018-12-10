@@ -26,6 +26,11 @@ def print_it(text):
     print(text.encode('utf-8'))
 
 
+def username_from_url(url):
+    """ Given https://twitter.com/gutendelight, return gutendelight """
+    return url.rsplit('/', 1)[-1]
+
+
 def yaml_path(unixpath, winpath, yaml):
     if _platform == "win32":
         return os.path.join(winpath, yaml)
@@ -46,9 +51,8 @@ def load_yaml(filename):
     oauth_token_secret: TODO_ENTER_YOURS
     )
     """
-    f = open(filename)
-    data = yaml.safe_load(f)
-    f.close()
+    with open(filename) as f:
+        data = yaml.safe_load(f)
 
     return data
 
@@ -88,6 +92,10 @@ def strip_tags(text):
 
 
 def tweeter_info(username):
+
+    # Assumes a single username, not a list
+    username = username_from_url(username)
+
     global TWITTER
     if TWITTER is None:
         try:
