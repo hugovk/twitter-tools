@@ -20,7 +20,7 @@ TWITTER = None
 
 # cmd.exe cannot do Unicode so encode first
 def print_it(text):
-    print(text.encode('utf-8'))
+    print(text.encode("utf-8"))
 
 
 def load_yaml(filename):
@@ -54,14 +54,16 @@ def get_list_members(list_owner, list_name):
 
     while cursor != 0:
         # print("Cursor:", cursor)
-        users = TWITTER.lists.members(owner_screen_name=list_owner,
-                                      slug=list_name,
-                                      cursor=cursor,
-                                      include_user_entities=False,
-                                      skip_status=True,
-                                      count=5000)
-        cursor = users['next_cursor']
-        all_users.extend(users['users'])
+        users = TWITTER.lists.members(
+            owner_screen_name=list_owner,
+            slug=list_name,
+            cursor=cursor,
+            include_user_entities=False,
+            skip_status=True,
+            count=5000,
+        )
+        cursor = users["next_cursor"]
+        all_users.extend(users["users"])
 
     return all_users
 
@@ -69,34 +71,37 @@ def get_list_members(list_owner, list_name):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Print out the members of a Twitter list.",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
     parser.add_argument(
-        '-y', '--yaml',
-        default='data/cookerybot.yaml',
+        "-y",
+        "--yaml",
+        default="data/cookerybot.yaml",
         help="YAML file location containing Twitter keys and secrets. "
-              "Just for read-only access, doesn't post to Twitter.")
-    parser.add_argument(
-        '-s', '--sort',
-        default='followers_count',
-        help="Sort by this")
-    parser.add_argument('user', help="The list owner")
-    parser.add_argument('list', help="The list slug")
+        "Just for read-only access, doesn't post to Twitter.",
+    )
+    parser.add_argument("-s", "--sort", default="followers_count", help="Sort by this")
+    parser.add_argument("user", help="The list owner")
+    parser.add_argument("list", help="The list slug")
     args = parser.parse_args()
 
     credentials = load_yaml(args.yaml)
 
     if TWITTER is None:
-        TWITTER = Twitter(auth=OAuth(
-            credentials['access_token'],
-            credentials['access_token_secret'],
-            credentials['consumer_key'],
-            credentials['consumer_secret']))
+        TWITTER = Twitter(
+            auth=OAuth(
+                credentials["access_token"],
+                credentials["access_token_secret"],
+                credentials["consumer_key"],
+                credentials["consumer_secret"],
+            )
+        )
 
     users = get_list_members(args.user, args.list)
 
     # Sort
     users = sorted(users, key=lambda k: k[args.sort])
-#     pprint(members)
+    #     pprint(members)
     for user in users:
         print(user[args.sort], "\t", user["screen_name"])
 

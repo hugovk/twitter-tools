@@ -19,7 +19,7 @@ TWITTER = None
 
 # cmd.exe cannot do Unicode so encode first
 def print_it(text):
-    print(text.encode('utf-8'))
+    print(text.encode("utf-8"))
 
 
 def load_yaml(filename):
@@ -48,17 +48,18 @@ def get_user_timeline(username, max_id=None):
         try:
             if max_id:
                 user_timeline = TWITTER.statuses.user_timeline(
-                    screen_name=username, count=200, trim_user=True,
-                    max_id=max_id)
+                    screen_name=username, count=200, trim_user=True, max_id=max_id
+                )
             else:
                 user_timeline = TWITTER.statuses.user_timeline(
-                    screen_name=username, count=200, trim_user=True)
+                    screen_name=username, count=200, trim_user=True
+                )
             got_them = True
         except twitter.api.TwitterHTTPError as e:
             # Rate limit? Try again soon.
-            print("*"*80)
+            print("*" * 80)
             print(e)
-            print("*"*80)
+            print("*" * 80)
             print("Sleep for just over a minute")
             time.sleep(61)
     print(len(user_timeline))
@@ -69,16 +70,19 @@ def best_tweets(username):
     global TWITTER
     if TWITTER is None:
         try:
-            access_token = data['access_token']
-            access_token_secret = data['access_token_secret']
+            access_token = data["access_token"]
+            access_token_secret = data["access_token_secret"]
         except KeyError:  # Older YAMLs
-            access_token = data['oauth_token']
-            access_token_secret = data['oauth_token_secret']
-        TWITTER = twitter.Twitter(auth=twitter.OAuth(
-            access_token,
-            access_token_secret,
-            data['consumer_key'],
-            data['consumer_secret']))
+            access_token = data["oauth_token"]
+            access_token_secret = data["oauth_token_secret"]
+        TWITTER = twitter.Twitter(
+            auth=twitter.OAuth(
+                access_token,
+                access_token_secret,
+                data["consumer_key"],
+                data["consumer_secret"],
+            )
+        )
 
     today = datetime.date.today()
     first_of_this_month = today.replace(day=1)
@@ -102,22 +106,22 @@ def best_tweets(username):
 
         # Go through each batch
         for tweet in user_timeline:
-            created_at = tweet['created_at']
+            created_at = tweet["created_at"]
 
             # Convert Twitter timestamp to Python datetime
             created_at = datetime.datetime.strptime(
-                created_at, '%a %b %d %H:%M:%S +0000 %Y')
+                created_at, "%a %b %d %H:%M:%S +0000 %Y"
+            )
 
             # Convert to datetime
             created_at = created_at.date()
 
             # Keep track of last tweet
-            max_id = tweet['id']
+            max_id = tweet["id"]
 
             if first_of_last_month <= created_at <= last_of_last_month:
                 # print(str(created_at) + "*")
-                tweet['fav_rt_count'] = (tweet['favorite_count'] +
-                                         tweet['retweet_count'])
+                tweet["fav_rt_count"] = tweet["favorite_count"] + tweet["retweet_count"]
 
                 tweets.append(tweet)
 
@@ -127,7 +131,7 @@ def best_tweets(username):
                 get_more = False
 
             # else:
-                # print(created_at)
+            # print(created_at)
 
         print("Kept", len(tweets), "tweets")
 
@@ -135,8 +139,7 @@ def best_tweets(username):
             user_timeline = get_user_timeline(username, max_id)
 
     # Sort the found tweets by fav_rt_count
-    best_tweet_list = sorted(tweets, key=lambda k: k['fav_rt_count'],
-                             reverse=True)
+    best_tweet_list = sorted(tweets, key=lambda k: k["fav_rt_count"], reverse=True)
 
     # # Only list enough that'll fit in a single tweet
     # count = 0
@@ -146,42 +149,54 @@ def best_tweets(username):
 
         # count += len(tweet['text']) + 1
         # if count > 280:
-            # break
+        # break
 
-        print_it(str(tweet['fav_rt_count']) + " " +
-                 str(tweet['favorite_count']) + " " +
-                 str(tweet['retweet_count']) + "\t" +
-                 "https://twitter.com/" + username + "/status/" +
-                 tweet['id_str'] + "\t" + tweet['text'])
+        print_it(
+            str(tweet["fav_rt_count"])
+            + " "
+            + str(tweet["favorite_count"])
+            + " "
+            + str(tweet["retweet_count"])
+            + "\t"
+            + "https://twitter.com/"
+            + username
+            + "/status/"
+            + tweet["id_str"]
+            + "\t"
+            + tweet["text"]
+        )
 
     # # Reset
     # count = 0
 
     # Print just statuses
-    print("Popular tweets by @kaikkisanat in " +
-          first_of_last_month.strftime("%B") + ":")
+    print(
+        "Popular tweets by @kaikkisanat in " + first_of_last_month.strftime("%B") + ":"
+    )
     for tweet in best_tweet_list[:25]:
 
         # count += len(tweet['text'])
         # if count > 280:
-            # break
+        # break
 
-        print_it(tweet['text'])
+        print_it(tweet["text"])
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Find the best tweets from last month, by faves and RTs.",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
     parser.add_argument(
-        '-u', '--user',
-        default='kaikkisanat',
-        help="The Twitter account to check")
+        "-u", "--user", default="kaikkisanat", help="The Twitter account to check"
+    )
     parser.add_argument(
-        '-y', '--yaml',
-        default='/Users/hugo/Dropbox/bin/data/cookerybot.yaml',
+        "-y",
+        "--yaml",
+        default="/Users/hugo/Dropbox/bin/data/cookerybot.yaml",
         help="YAML file location containing Twitter keys and secrets. "
-              "Just for read-only access, doesn't post to Twitter.")
+        "Just for read-only access, doesn't post to Twitter.",
+    )
     args = parser.parse_args()
 
     data = load_yaml(args.yaml)

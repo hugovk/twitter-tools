@@ -23,12 +23,12 @@ TWITTER = None
 
 # cmd.exe cannot do Unicode so encode first
 def print_it(text):
-    print(text.encode('utf-8'))
+    print(text.encode("utf-8"))
 
 
 def username_from_url(url):
     """ Given https://twitter.com/gutendelight, return gutendelight """
-    return url.rsplit('/', 1)[-1]
+    return url.rsplit("/", 1)[-1]
 
 
 def yaml_path(unixpath, winpath, yaml):
@@ -66,9 +66,9 @@ def summarise_tweet_clients(tweets):
     sources = {}
     for tweet in tweets:
         try:
-            sources[tweet['source']] += 1
+            sources[tweet["source"]] += 1
         except KeyError:
-            sources[tweet['source']] = 1
+            sources[tweet["source"]] = 1
     return sources
 
 
@@ -88,7 +88,7 @@ def taggy(text, class_name):
 
 def strip_tags(text):
     """Strip HTML tags"""
-    return re.sub('<[^<]+?>', '', text)
+    return re.sub("<[^<]+?>", "", text)
 
 
 def tweeter_info(username):
@@ -99,21 +99,25 @@ def tweeter_info(username):
     global TWITTER
     if TWITTER is None:
         try:
-            access_token = data['access_token']
-            access_token_secret = data['access_token_secret']
+            access_token = data["access_token"]
+            access_token_secret = data["access_token_secret"]
         except KeyError:  # Older YAMLs
-            access_token = data['oauth_token']
-            access_token_secret = data['oauth_token_secret']
-        TWITTER = twitter.Twitter(auth=twitter.OAuth(
-            access_token,
-            access_token_secret,
-            data['consumer_key'],
-            data['consumer_secret']))
+            access_token = data["oauth_token"]
+            access_token_secret = data["oauth_token_secret"]
+        TWITTER = twitter.Twitter(
+            auth=twitter.OAuth(
+                access_token,
+                access_token_secret,
+                data["consumer_key"],
+                data["consumer_secret"],
+            )
+        )
 
-    users = [TWITTER.users.show(screen_name=','.join([username]))]  # TODO fix
+    users = [TWITTER.users.show(screen_name=",".join([username]))]  # TODO fix
 
     if args.html:
-        print('''
+        print(
+            """
 <html>
   <head>
   <title>Tweeter info</title>
@@ -163,21 +167,23 @@ def tweeter_info(username):
 </head>
 <body>
   <ol>
-''')
+"""
+        )
 
     now = time.time()
 
     for user in users:
 
         # pprint(user)
-        if 'status' not in user:
+        if "status" not in user:
             continue
-        status = user['status']
+        status = user["status"]
         # pprint(status)
-        created_at = status['created_at']
-        timestamp = calendar.timegm(time.strptime(
-            created_at, "%a %b %d %H:%M:%S +0000 %Y"))
-        seconds = now-timestamp
+        created_at = status["created_at"]
+        timestamp = calendar.timegm(
+            time.strptime(created_at, "%a %b %d %H:%M:%S +0000 %Y")
+        )
+        seconds = now - timestamp
         m, s = divmod(seconds, 60)
         h, m = divmod(m, 60)
         ago = "%dh %02dm ago" % (h, m)
@@ -187,97 +193,105 @@ def tweeter_info(username):
         elif h > 12:
             extra_classes = "warning"
 
-        text = status['text'].replace("\n", "<br>")
+        text = status["text"].replace("\n", "<br>")
 
         # "Mon Jun 08 11:23:45 +0000 2015"
-        created = user['created_at']
+        created = user["created_at"]
         # "08 Jun 2015"
         created = created[8:11] + created[4:7] + created[-5:]
 
-        tweets = commafy(user['statuses_count'])
-        following = commafy(user['friends_count'])
-        followers = commafy(user['followers_count'])
+        tweets = commafy(user["statuses_count"])
+        following = commafy(user["friends_count"])
+        followers = commafy(user["followers_count"])
 
-        user_link = "https://twitter.com/" + user['screen_name']
-        status_link = user_link + "/status/" + status['id_str']
+        user_link = "https://twitter.com/" + user["screen_name"]
+        status_link = user_link + "/status/" + status["id_str"]
         status_a_href = '<a href="' + status_link + '" target="twitter">'
 
         statuses = get_tweets(username)
         clients = summarise_tweet_clients(statuses)
 
         if args.html:
-            print('    <li class="user"><div class="tweet ' + extra_classes +
-                  '">')
-            print('      <div class="screen_name"><a href="' + user_link +
-                  '" target="twitter">@' + user['screen_name'] + '</a></div>')
-            print_it('      <div class="status">' + text + '</div>')
-            print('      <div class="created_at">' + status_a_href +
-                  status['created_at'] + '</a></div>')
-            print('      <div class="ago">' + status_a_href + ago +
-                  '</a></div>')
+            print('    <li class="user"><div class="tweet ' + extra_classes + '">')
+            print(
+                '      <div class="screen_name"><a href="'
+                + user_link
+                + '" target="twitter">@'
+                + user["screen_name"]
+                + "</a></div>"
+            )
+            print_it('      <div class="status">' + text + "</div>")
+            print(
+                '      <div class="created_at">'
+                + status_a_href
+                + status["created_at"]
+                + "</a></div>"
+            )
+            print('      <div class="ago">' + status_a_href + ago + "</a></div>")
             print('      <div class="stats">')
         else:
-            print('@' + user['screen_name'])
-            print_it(status['text'])
-            print(status['created_at'])
+            print("@" + user["screen_name"])
+            print_it(status["text"])
+            print(status["created_at"])
 
-        print(taggy('Created: ' + created, "created"))
-        print(taggy('Tweets: ' + tweets, "tweets"))
-        print(taggy('Following: ' + following, "following"))
-        print(taggy('Followers: ' + followers, "followers"))
+        print(taggy("Created: " + created, "created"))
+        print(taggy("Tweets: " + tweets, "tweets"))
+        print(taggy("Following: " + following, "following"))
+        print(taggy("Followers: " + followers, "followers"))
 
         if args.html:
-            print('        <span class="clients">'
-                  'Clients for last 100 tweets: ')
-            print('          <ul>')
+            print('        <span class="clients">' "Clients for last 100 tweets: ")
+            print("          <ul>")
         else:
-            print('Clients for last 100 tweets: ')
+            print("Clients for last 100 tweets: ")
         for client in clients:
             if args.html:
-                print_it('            <li>' + client + ': ' +
-                         str(clients[client]))
+                print_it("            <li>" + client + ": " + str(clients[client]))
             else:
-                print_it('   * ' + strip_tags(client) + ': ' +
-                         str(clients[client]))
+                print_it("   * " + strip_tags(client) + ": " + str(clients[client]))
         if args.html:
-            print('''
+            print(
+                """
           </ul>
         </span>
       </div>
     </li>
-''')
+"""
+            )
 
     if args.html:
-        print('''
+        print(
+            """
   </ol>
 </body>
 </html>
-''')
+"""
+        )
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Get some info about a Twitter user, like clients used.",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument("user", help="The Twitter account to check")
     parser.add_argument(
-        'user',
-        help="The Twitter account to check")
+        "-u",
+        "--unixpath",
+        default="/Users/hugo/Dropbox/",
+        help="Unixy (Linux/Mac) root path to YAML file.",
+    )
     parser.add_argument(
-        '-u', '--unixpath',
-        default='/Users/hugo/Dropbox/',
-        help="Unixy (Linux/Mac) root path to YAML file.")
+        "-w", "--winpath", default="M:/", help="Windows root path to YAML file."
+    )
     parser.add_argument(
-        '-w', '--winpath',
-        default='M:/',
-        help="Windows root path to YAML file.")
-    parser.add_argument(
-        '-y', '--yaml',
-        default='bin/data/cookerybot.yaml',
+        "-y",
+        "--yaml",
+        default="bin/data/cookerybot.yaml",
         help="YAML file location containing Twitter keys and secrets. "
-              "Just for read-only access, doesn't post to Twitter.")
-    parser.add_argument(
-        '--html', action='store_true',
-        help="HTML tags for formatting")
+        "Just for read-only access, doesn't post to Twitter.",
+    )
+    parser.add_argument("--html", action="store_true", help="HTML tags for formatting")
     args = parser.parse_args()
 
     path = yaml_path(args.unixpath, args.winpath, args.yaml)

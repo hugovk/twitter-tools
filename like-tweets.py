@@ -20,7 +20,7 @@ TWITTER = None
 
 # cmd.exe cannot do Unicode so encode first
 def print_it(text):
-    print(text.encode('utf-8'))
+    print(text.encode("utf-8"))
 
 
 def yaml_path(unixpath, winpath, yaml):
@@ -57,23 +57,26 @@ def id_from_tweet_url(url):
     >>> id_from_tweet_url(url)
     771714518724579328L
     """
-    return int(url[url.rfind("/")+1:])
+    return int(url[url.rfind("/") + 1 :])
 
 
 def like_tweets(tweets):
     global TWITTER
     if TWITTER is None:
         try:
-            access_token = data['access_token']
-            access_token_secret = data['access_token_secret']
+            access_token = data["access_token"]
+            access_token_secret = data["access_token_secret"]
         except KeyError:  # Older YAMLs
-            access_token = data['oauth_token']
-            access_token_secret = data['oauth_token_secret']
-        TWITTER = twitter.Twitter(auth=twitter.OAuth(
-            access_token,
-            access_token_secret,
-            data['consumer_key'],
-            data['consumer_secret']))
+            access_token = data["oauth_token"]
+            access_token_secret = data["oauth_token_secret"]
+        TWITTER = twitter.Twitter(
+            auth=twitter.OAuth(
+                access_token,
+                access_token_secret,
+                data["consumer_key"],
+                data["consumer_secret"],
+            )
+        )
 
     for tweet in tweets:
         print(tweet)
@@ -83,27 +86,29 @@ def like_tweets(tweets):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Like these tweets.",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument("tweets", nargs="+", help="The tweets to like")
     parser.add_argument(
-        'tweets',
-        nargs='+',
-        help="The tweets to like")
+        "-u",
+        "--unixpath",
+        default="/Users/hugo/Dropbox/bin/data/",
+        help="Unixy (Linux/Mac) root path to YAML file.",
+    )
     parser.add_argument(
-        '-u', '--unixpath',
-        default='/Users/hugo/Dropbox/bin/data/',
-        help="Unixy (Linux/Mac) root path to YAML file.")
+        "-w",
+        "--winpath",
+        default="M:/bin/data/",
+        help="Windows root path to YAML file.",
+    )
     parser.add_argument(
-        '-w', '--winpath',
-        default='M:/bin/data/',
-        help="Windows root path to YAML file.")
-    parser.add_argument(
-        '-y', '--yaml',
-        default='kaikkisanat.yaml',
+        "-y",
+        "--yaml",
+        default="kaikkisanat.yaml",
         help="YAML file location containing Twitter keys and secrets "
-             "for the account to do the liking. Needs write permission.")
-    parser.add_argument(
-        '--html', action='store_true',
-        help="HTML tags for formatting")
+        "for the account to do the liking. Needs write permission.",
+    )
+    parser.add_argument("--html", action="store_true", help="HTML tags for formatting")
     args = parser.parse_args()
     doctest.testmod()
 

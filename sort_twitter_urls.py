@@ -11,8 +11,8 @@ import fileinput
 # from operator import itemgetter
 # from pprint import pprint
 
-if __name__ == '__main__':
-    lines = [line.rstrip('\n').split("/") for line in fileinput.input()]
+if __name__ == "__main__":
+    lines = [line.rstrip("\n").split("/") for line in fileinput.input()]
 
     # lines.sort(key=itemgetter(int(-1)))
     lines = sorted(lines, key=lambda i: int(i[-1]))
@@ -21,6 +21,6 @@ if __name__ == '__main__':
         print(line[-1])
 
     for line in lines:
-        print('{0}'.format('/'.join(line)))
+        print("{0}".format("/".join(line)))
 
 # End of file

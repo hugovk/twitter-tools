@@ -17,7 +17,7 @@ TWITTER = None
 
 # cmd.exe cannot do Unicode so encode first
 def print_it(text):
-    print(text.encode('utf-8'))
+    print(text.encode("utf-8"))
 
 
 def load_yaml(filename):
@@ -42,23 +42,28 @@ def load_yaml(filename):
 def get_list_members(user, list_name):
     print("GET lists/members")
     # Assumption: no more than 5000 in list.
-    members = TWITTER.lists.members(owner_screen_name=user, slug=list_name,
-                                    include_entities=False, skip_status=True,
-                                    count=5000)
+    members = TWITTER.lists.members(
+        owner_screen_name=user,
+        slug=list_name,
+        include_entities=False,
+        skip_status=True,
+        count=5000,
+    )
     # pprint(members)
 
     # Extract IDs
-    ids = [member['id'] for member in members['users']]
+    ids = [member["id"] for member in members["users"]]
     pprint(ids)
     return ids
 
 
 def get_authenticated_user_id():
     print("GET account/verify_credentials")
-    own_id = TWITTER.account.verify_credentials(include_entities=False,
-                                                skip_status=True)
+    own_id = TWITTER.account.verify_credentials(
+        include_entities=False, skip_status=True
+    )
     # pprint(own_id)
-    own_id = own_id['id']
+    own_id = own_id["id"]
     pprint(own_id)
     return own_id
 
@@ -66,24 +71,24 @@ def get_authenticated_user_id():
 def get_friends(user_id):
     print("GET friends/ids")
     # Assumption: no more than 5000 friends.
-    friends = TWITTER.friends.ids(user_id=user_id, count=5000,
-                                  include_entities=False, skip_status=True)
+    friends = TWITTER.friends.ids(
+        user_id=user_id, count=5000, include_entities=False, skip_status=True
+    )
     # pprint(friends)
 
     # Extract IDs
-    ids = friends['ids']
+    ids = friends["ids"]
     pprint(ids)
     return ids
 
 
 def get_user_id(screen_name):
     print("GET users/show")
-    user = TWITTER.users.show(screen_name=screen_name,
-                              include_entities=False)
+    user = TWITTER.users.show(screen_name=screen_name, include_entities=False)
     # pprint(user)
 
     # Extract ID
-    id = user['id']
+    id = user["id"]
     pprint(id)
     return id
 
@@ -93,23 +98,26 @@ def follow_by_id(user_ids):
         print("POST friendships/create")
         ret = TWITTER.friendships.create(user_id=user_id)
         # pprint(ret)
-        print(ret['id'], "@"+ret['screen_name'], ret['name'])
+        print(ret["id"], "@" + ret["screen_name"], ret["name"])
 
 
 def follow_list_members(user, list_name):
     global TWITTER
     if TWITTER is None:
         try:
-            access_token = data['access_token']
-            access_token_secret = data['access_token_secret']
+            access_token = data["access_token"]
+            access_token_secret = data["access_token_secret"]
         except KeyError:  # Older YAMLs
-            access_token = data['oauth_token']
-            access_token_secret = data['oauth_token_secret']
-        TWITTER = twitter.Twitter(auth=twitter.OAuth(
-            access_token,
-            access_token_secret,
-            data['consumer_key'],
-            data['consumer_secret']))
+            access_token = data["oauth_token"]
+            access_token_secret = data["oauth_token_secret"]
+        TWITTER = twitter.Twitter(
+            auth=twitter.OAuth(
+                access_token,
+                access_token_secret,
+                data["consumer_key"],
+                data["consumer_secret"],
+            )
+        )
 
     users_to_follow = get_list_members(user, list_name)
 
@@ -126,8 +134,7 @@ def follow_list_members(user, list_name):
     users_to_follow.append(botally)
 
     # Find who to follow
-    users_to_follow = list(
-        set(users_to_follow) - set(friends) - set([own_id]))
+    users_to_follow = list(set(users_to_follow) - set(friends) - set([own_id]))
     pprint(users_to_follow)
 
     # Follow 'em!
@@ -141,16 +148,17 @@ def follow_list_members(user, list_name):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Follow the owner and members of a Twitter list",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
     parser.add_argument(
-        '-y', '--yaml',
-        help="YAML file location containing Twitter keys and secrets")
+        "-y", "--yaml", help="YAML file location containing Twitter keys and secrets"
+    )
     parser.add_argument(
-        '-u', '--user', default='hugovk',
-        help="Owner of the list to follow")
+        "-u", "--user", default="hugovk", help="Owner of the list to follow"
+    )
     parser.add_argument(
-        '-l', '--list', default='my-twitterbot-army',
-        help="Name of the list to follow")
+        "-l", "--list", default="my-twitterbot-army", help="Name of the list to follow"
+    )
     args = parser.parse_args()
 
     data = load_yaml(args.yaml)

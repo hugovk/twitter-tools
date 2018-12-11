@@ -11,7 +11,7 @@ import argparse
 import doctest
 import os
 import twitter  # pip install twitter
-import yaml     # pip install pyyaml
+import yaml  # pip install pyyaml
 
 # from pprint import pprint
 
@@ -20,7 +20,7 @@ TWITTER = None
 
 # cmd.exe cannot do Unicode so encode first
 def print_it(text):
-    print(text.encode('utf-8'))
+    print(text.encode("utf-8"))
 
 
 def yaml_path(unixpath, winpath, yaml):
@@ -58,23 +58,26 @@ def id_from_tweet_url(url):
     >>> id_from_tweet_url(url)
     771714518724579328
     """
-    return int(url[url.rfind("/")+1:])
+    return int(url[url.rfind("/") + 1 :])
 
 
 def download_tweets_images(tweets):
     global TWITTER
     if TWITTER is None:
         try:
-            access_token = data['access_token']
-            access_token_secret = data['access_token_secret']
+            access_token = data["access_token"]
+            access_token_secret = data["access_token_secret"]
         except KeyError:  # Older YAMLs
-            access_token = data['oauth_token']
-            access_token_secret = data['oauth_token_secret']
-        TWITTER = twitter.Twitter(auth=twitter.OAuth(
-            access_token,
-            access_token_secret,
-            data['consumer_key'],
-            data['consumer_secret']))
+            access_token = data["oauth_token"]
+            access_token_secret = data["oauth_token_secret"]
+        TWITTER = twitter.Twitter(
+            auth=twitter.OAuth(
+                access_token,
+                access_token_secret,
+                data["consumer_key"],
+                data["consumer_secret"],
+            )
+        )
 
     usernames = set()
     urls = []
@@ -83,14 +86,14 @@ def download_tweets_images(tweets):
         tweet_id = id_from_tweet_url(tweet)
         tweet = TWITTER.statuses.show(_id=tweet_id, include_entities=True)
         # pprint(tweet)
-        username = tweet['user']['screen_name']
+        username = tweet["user"]["screen_name"]
         print(username)
         try:
-            media = tweet['extended_entities']['media']
+            media = tweet["extended_entities"]["media"]
             # pprint(media)
             for item in media:
-                url = item['media_url_https'] + ":large"
-                outfile = "{}-{}-{}.jpg".format(username, tweet_id, item['id'])
+                url = item["media_url_https"] + ":large"
+                outfile = "{}-{}-{}.jpg".format(username, tweet_id, item["id"])
                 print(url, outfile)
                 urls.append(url)
                 cmd = "wget --no-verbose -nc {} -O {}".format(url, outfile)
@@ -110,24 +113,30 @@ def download_tweets_images(tweets):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Download the images from these tweets.",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
     parser.add_argument(
-        'tweets',
-        nargs='+',
-        help="Download the images from these tweets.")
+        "tweets", nargs="+", help="Download the images from these tweets."
+    )
     parser.add_argument(
-        '-u', '--unixpath',
-        default='/Users/hugo/Dropbox/bin/data/',
-        help="Unixy (Linux/Mac) root path to YAML file.")
+        "-u",
+        "--unixpath",
+        default="/Users/hugo/Dropbox/bin/data/",
+        help="Unixy (Linux/Mac) root path to YAML file.",
+    )
     parser.add_argument(
-        '-w', '--winpath',
-        default='M:/bin/data/',
-        help="Windows root path to YAML file.")
+        "-w",
+        "--winpath",
+        default="M:/bin/data/",
+        help="Windows root path to YAML file.",
+    )
     parser.add_argument(
-        '-y', '--yaml',
-        default='kaikkisanat.yaml',
+        "-y",
+        "--yaml",
+        default="kaikkisanat.yaml",
         help="YAML file location containing Twitter keys and secrets "
-             "for the account to do the liking. Needs write permission.")
+        "for the account to do the liking. Needs write permission.",
+    )
     args = parser.parse_args()
     doctest.testmod()
 
