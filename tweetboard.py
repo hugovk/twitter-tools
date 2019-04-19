@@ -61,7 +61,7 @@ def get_list_members(list_owner, list_name):
 
 def commafy(number):
     """ Given an int, return a string with thousands separators """
-    return "{:,}".format(number)
+    return f"{number:,}"
 
 
 def tweetboard(list_owner, list_name):

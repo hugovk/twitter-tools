@@ -58,7 +58,7 @@ def load_yaml(filename):
 
 def commafy(number):
     """ Given an int, return a string with thousands separators """
-    return "{:,}".format(number)
+    return f"{number:,}"
 
 
 def summarise_tweet_clients(tweets):
@@ -80,7 +80,7 @@ def get_tweets(username):
 def taggy(text, class_name):
     """Wrap in HTML tags"""
     if args.html:
-        return '<span class="{}">{}</span>'.format(class_name, text)
+        return f'<span class="{class_name}">{text}</span>'
     else:
         return text
 

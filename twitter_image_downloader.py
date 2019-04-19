@@ -95,7 +95,7 @@ def download_tweets_images(tweets):
                 outfile = "{}-{}-{}.jpg".format(username, tweet_id, item["id"])
                 print(url, outfile)
                 urls.append(url)
-                cmd = "wget --no-verbose -nc {} -O {}".format(url, outfile)
+                cmd = f"wget --no-verbose -nc {url} -O {outfile}"
                 print(cmd)
                 os.system(cmd)
             usernames.add(username)
@@ -103,10 +103,10 @@ def download_tweets_images(tweets):
             print("no image found for", url)
             continue
 
-    credits = " ".join(["@{}".format(u) for u in usernames])
+    credits = " ".join([f"@{u}" for u in usernames])
     print(credits)
     os.system('echo "{}" >> credits.txt'.format("\n".join(tweets)))
-    os.system('echo "{}" >> credits.txt'.format(credits))
+    os.system(f'echo "{credits}" >> credits.txt')
 
 
 if __name__ == "__main__":
