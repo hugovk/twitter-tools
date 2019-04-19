@@ -9,14 +9,8 @@ is now waiting for -- from there you get your access key and secret.
 Based on beaugunderson's:
 https://gist.github.com/moonmilk/035917e668872013c1bd#gistcomment-1333900
 """
-from __future__ import print_function, unicode_literals
 import argparse
 import tweepy
-
-try:
-    input = raw_input
-except NameError:
-    pass
 
 
 if __name__ == "__main__":

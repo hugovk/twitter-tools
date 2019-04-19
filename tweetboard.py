@@ -6,8 +6,6 @@ Doesn't post anything to Twitter.
 
 Usage: python tweetboard.py > tweetboard.html
 """
-from __future__ import print_function, unicode_literals
-
 import argparse
 import calendar
 import time

@@ -4,7 +4,6 @@
 Download the images from these tweets
 Usage: python twitter_image_downloader.py tweet1 [tweet2 [tweet3]]
 """
-from __future__ import print_function, unicode_literals
 from sys import platform as _platform
 
 import argparse

@@ -4,8 +4,6 @@
 Given a Twitter list (owner's screen_name + list slug),
 follow the owner and each of the list members.
 """
-from __future__ import print_function, unicode_literals
-
 import argparse
 import twitter
 import yaml
@@ -134,7 +132,7 @@ def follow_list_members(user, list_name):
     users_to_follow.append(botally)
 
     # Find who to follow
-    users_to_follow = list(set(users_to_follow) - set(friends) - set([own_id]))
+    users_to_follow = list(set(users_to_follow) - set(friends) - {own_id})
     pprint(users_to_follow)
 
     # Follow 'em!

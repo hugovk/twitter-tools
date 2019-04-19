@@ -3,8 +3,6 @@
 """
 Print out a user's friends and followers.
 """
-from __future__ import print_function, unicode_literals
-
 import argparse
 from twitter import Twitter, OAuth  # pip install twitter
 import yaml

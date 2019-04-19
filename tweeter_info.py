@@ -5,7 +5,6 @@ Get some info about a Twitter user, like clients used.
 Usage for CLI: python tweeter_info.py
 Usage for web: python tweeter_info.py --html > tweeter_info.html
 """
-from __future__ import print_function, unicode_literals
 from sys import platform as _platform
 
 import argparse
@@ -81,7 +80,7 @@ def get_tweets(username):
 def taggy(text, class_name):
     """Wrap in HTML tags"""
     if args.html:
-        return '<span class="{0}">{1}</span>'.format(class_name, text)
+        return '<span class="{}">{}</span>'.format(class_name, text)
     else:
         return text
 

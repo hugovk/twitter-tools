@@ -3,7 +3,6 @@
 """
 Find the best tweets from last month, by faves and RTs
 """
-from __future__ import print_function, unicode_literals
 from dateutil.relativedelta import relativedelta
 
 import argparse

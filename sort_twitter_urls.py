@@ -5,7 +5,6 @@ the same as sorting chronologically.
 Usage:
 python sort_twitter_urls.py list_of_urls.txt
 """
-from __future__ import print_function, unicode_literals
 import fileinput
 
 # from operator import itemgetter
@@ -21,6 +20,6 @@ if __name__ == "__main__":
         print(line[-1])
 
     for line in lines:
-        print("{0}".format("/".join(line)))
+        print("{}".format("/".join(line)))
 
 # End of file

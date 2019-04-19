@@ -7,8 +7,6 @@ Usage examples:
 python twitter_list_members.py hugovk my-twitterbot-army
 python twitter_list_members.py botally omnibots
 """
-from __future__ import print_function, unicode_literals
-
 import argparse
 from twitter import Twitter, OAuth
 import yaml
