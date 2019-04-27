@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # encoding: utf-8
 """
 Get some info about a Twitter user, like clients used.
@@ -18,11 +18,6 @@ import yaml
 # from pprint import pprint
 
 TWITTER = None
-
-
-# cmd.exe cannot do Unicode so encode first
-def print_it(text):
-    print(text.encode("utf-8"))
 
 
 def username_from_url(url):
@@ -219,7 +214,7 @@ def tweeter_info(username):
                 + user["screen_name"]
                 + "</a></div>"
             )
-            print_it('      <div class="status">' + text + "</div>")
+            print('      <div class="status">' + text + "</div>")
             print(
                 '      <div class="created_at">'
                 + status_a_href
@@ -230,7 +225,7 @@ def tweeter_info(username):
             print('      <div class="stats">')
         else:
             print("@" + user["screen_name"])
-            print_it(status["text"])
+            print(status["text"])
             print(status["created_at"])
 
         print(taggy("Created: " + created, "created"))
@@ -245,9 +240,9 @@ def tweeter_info(username):
             print("Clients for last 100 tweets: ")
         for client in clients:
             if args.html:
-                print_it("            <li>" + client + ": " + str(clients[client]))
+                print("            <li>" + client + ": " + str(clients[client]))
             else:
-                print_it("   * " + strip_tags(client) + ": " + str(clients[client]))
+                print("   * " + strip_tags(client) + ": " + str(clients[client]))
         if args.html:
             print(
                 """
