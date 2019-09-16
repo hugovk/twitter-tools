@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # encoding: utf-8
 """
-Print out a user's friends and followers.
+Print out a user's followers (TODO and friends).
 """
 import argparse
-from twitter import Twitter, OAuth  # pip install twitter
-import yaml
+from operator import itemgetter
+from pprint import pprint  # noqa: F401
 
-# from pprint import pprint
+import yaml
+from twitter import OAuth, Twitter  # pip install twitter
 
 TWITTER = None
 
@@ -84,7 +85,8 @@ def get_followers(user):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="TODO", formatter_class=argparse.ArgumentDefaultsHelpFormatter
+        description="Print out a user's followers",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
         "-y", "--yaml", help="YAML file location containing Twitter keys and secrets"
@@ -95,10 +97,16 @@ if __name__ == "__main__":
     credentials = load_yaml(args.yaml)
 
     if TWITTER is None:
+        try:
+            access_token = credentials["access_token"]
+            access_token_secret = credentials["access_token_secret"]
+        except KeyError:  # Older YAMLs
+            access_token = credentials["oauth_token"]
+            access_token_secret = credentials["oauth_token_secret"]
         TWITTER = Twitter(
             auth=OAuth(
-                credentials["oauth_token"],
-                credentials["oauth_token_secret"],
+                access_token,
+                access_token_secret,
                 credentials["consumer_key"],
                 credentials["consumer_secret"],
             )
@@ -108,8 +116,13 @@ if __name__ == "__main__":
 
     users = get_followers(args.user)
 
-    #     pprint(members)
+    # Sort by most followed
+    users = sorted(users, key=itemgetter("followers_count"), reverse=True)
+
+    fields_to_show = ["followers_count", "created_at", "screen_name"]
+    print("\t".join(fields_to_show))
     for user in users:
-        print(user["screen_name"], "\t", user["created_at"])
+        data_to_show = [str(user[field]) for field in fields_to_show]
+        print("\t".join(data_to_show))
 
 # End of file
