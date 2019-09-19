@@ -4,11 +4,12 @@
 Print out a user's followers (TODO and friends).
 """
 import argparse
+import time
 from operator import itemgetter
 from pprint import pprint  # noqa: F401
 
 import yaml
-from twitter import OAuth, Twitter  # pip install twitter
+from twitter import OAuth, Twitter, api  # pip install twitter
 
 TWITTER = None
 
@@ -70,15 +71,23 @@ def get_followers(user):
 
     while cursor != 0:
         # print("Cursor:", cursor)
-        users = TWITTER.followers.list(
-            screen_name=user,
-            cursor=cursor,
-            include_user_entities=False,
-            skip_status=True,
-            count=200,
-        )
-        cursor = users["next_cursor"]
-        all_users.extend(users["users"])
+        try:
+            users = TWITTER.followers.list(
+                screen_name=user,
+                cursor=cursor,
+                include_user_entities=False,
+                skip_status=True,
+                count=200,
+            )
+            cursor = users["next_cursor"]
+            all_users.extend(users["users"])
+        except api.TwitterHTTPError as e:
+            # Rate limit? Try again soon.
+            print("*" * 80)
+            print(e)
+            print("*" * 80)
+            print("Sleep for just over a minute")
+            time.sleep(61)
 
     return all_users
 
