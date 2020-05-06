@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
 """
 Given a Twitter list make a dashboard of their latest tweets.
 Doesn't post anything to Twitter.
@@ -15,11 +14,6 @@ import yaml
 # from pprint import pprint
 
 TWITTER = None
-
-
-# cmd.exe cannot do Unicode so encode first
-def print_it(text):
-    print(text.encode("utf-8"))
 
 
 def load_yaml(filename):
@@ -183,7 +177,7 @@ def tweetboard(list_owner, list_name):
             + user["screen_name"]
             + "</a></div>"
         )
-        print_it('      <div class="status">' + text + "</div>")
+        print('      <div class="status">' + text + "</div>")
         print(
             '      <div class="created_at">'
             + status_a_href
