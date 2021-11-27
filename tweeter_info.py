@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
-# encoding: utf-8
 """
 Get some info about a Twitter user, like clients used.
 Usage for CLI: python tweeter_info.py
 Usage for web: python tweeter_info.py --html > tweeter_info.html
 """
-from sys import platform as _platform
-
 import argparse
 import calendar
 import os
 import re
 import time
+from sys import platform as _platform
+
 import twitter
 import yaml
 
@@ -21,7 +20,7 @@ TWITTER = None
 
 
 def username_from_url(url):
-    """ Given https://twitter.com/gutendelight, return gutendelight """
+    """Given https://twitter.com/gutendelight, return gutendelight"""
     return url.rsplit("/", 1)[-1]
 
 
@@ -52,7 +51,7 @@ def load_yaml(filename):
 
 
 def commafy(number):
-    """ Given an int, return a string with thousands separators """
+    """Given an int, return a string with thousands separators"""
     return f"{number:,}"
 
 
@@ -234,7 +233,7 @@ def tweeter_info(username):
         print(taggy("Followers: " + followers, "followers"))
 
         if args.html:
-            print('        <span class="clients">' "Clients for last 100 tweets: ")
+            print('        <span class="clients">Clients for last 100 tweets: ')
             print("          <ul>")
         else:
             print("Clients for last 100 tweets: ")

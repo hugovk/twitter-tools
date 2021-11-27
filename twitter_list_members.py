@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
 """
 Print out the members of a Twitter list.
 
@@ -8,8 +7,9 @@ python twitter_list_members.py hugovk my-twitterbot-army
 python twitter_list_members.py botally omnibots
 """
 import argparse
-from twitter import Twitter, OAuth
+
 import yaml
+from twitter import OAuth, Twitter
 
 # from pprint import pprint
 

@@ -10,8 +10,8 @@ Based on beaugunderson's:
 https://gist.github.com/moonmilk/035917e668872013c1bd#gistcomment-1333900
 """
 import argparse
-import tweepy
 
+import tweepy
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(

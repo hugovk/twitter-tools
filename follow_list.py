@@ -1,14 +1,13 @@
 #!/usr/bin/env python
-# encoding: utf-8
 """
 Given a Twitter list (owner's screen_name + list slug),
 follow the owner and each of the list members.
 """
 import argparse
+from pprint import pprint
+
 import twitter
 import yaml
-
-from pprint import pprint
 
 TWITTER = None
 

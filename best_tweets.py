@@ -1,15 +1,14 @@
 #!/usr/bin/env python
-# encoding: utf-8
 """
 Find the best tweets from last month, by faves and RTs
 """
-from dateutil.relativedelta import relativedelta
-
 import argparse
 import datetime
 import time
+
 import twitter
 import yaml
+from dateutil.relativedelta import relativedelta
 
 # from pprint import pprint
 

@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-# encoding: utf-8
 """
 Download the images from these tweets
 Usage: python twitter_image_downloader.py tweet1 [tweet2 [tweet3]]
 """
-from sys import platform as _platform
-
 import argparse
 import doctest
 import os
+from sys import platform as _platform
+
 import twitter  # pip install twitter
 import yaml  # pip install pyyaml
 

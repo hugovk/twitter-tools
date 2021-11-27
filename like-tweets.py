@@ -1,14 +1,13 @@
 #!/usr/bin/env python
-# encoding: utf-8
 """
 Like these tweets
 Usage: python like_tweets.py tweet1 [tweet2 [tweet3]]
 """
-from sys import platform as _platform
-
 import argparse
 import doctest
 import os
+from sys import platform as _platform
+
 import twitter
 import yaml
 

@@ -8,6 +8,7 @@ Usage: python tweetboard.py > tweetboard.html
 import argparse
 import calendar
 import time
+
 import twitter
 import yaml
 
@@ -54,7 +55,7 @@ def get_list_members(list_owner, list_name):
 
 
 def commafy(number):
-    """ Given an int, return a string with thousands separators """
+    """Given an int, return a string with thousands separators"""
     return f"{number:,}"
 
 
